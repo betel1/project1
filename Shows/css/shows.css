@@ -1,0 +1,31 @@
+h1 
+{
+color: white; 
+font-size: 36px; 
+font-family: courier; 
+}
+
+.griditem
+{
+color: white; 
+font-size: 20px; 
+font-family: courier: 
+}
+
+#rec_genres 
+{
+font-size: 150%; 
+color: orange; 
+}
+
+html, body, {
+    position:fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+}
+
+body{
+    background-color: black;
+}
