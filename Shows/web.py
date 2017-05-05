@@ -35,25 +35,26 @@ class FormHandler(tornado.web.RequestHandler):
         Popular = float(int(self.get_argument("q10", 0)) + int(self.get_argument("q07", 0)))/2
         Engaging= float(int(self.get_argument("q10", 0)) + int(self.get_argument("q3", 0)))/2
         
-        if Open>=5 :
+        if Open >= 3.5 :
             gen1 = "Drama"
             gen2 = "Mystery"
-        if violence>=5: 
+        
+        elif violence >= 3.5: 
         	gen1 ="Action"
         	gen2 ="Thriller"
-        if Realistic>=5: 
+        elif Realistic >= 3.5: 
         	gen1="Drama"
         	gen2="Comedy"
-        if Popular>=5: 
+        elif Popular >= 3.5: 
         	gen1="Drama"
         	gen2= "Adventure"
-        if Engaging>=5: 
+        elif Engaging >= 3.5: 
         	gen1="Mystery"
         	gen2= "Sci-fi"
         else:
-            gen1 = "Western"
-            gen2 = "Fantasy"
-            
+               gen1= "Western"
+               gen2 = "Fantasy"
+        
 
         
         self.render('result.html', gen1=gen1,gen2=gen2)
