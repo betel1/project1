@@ -81,13 +81,13 @@ class ShowsDB(object):
        
     
     
-    def search(self,genre):
+    def search(self,genre1,genre2):
         cur = self.conn.cursor()
    
-        search = '''SELECT Shows.show_id, Shows.name, Shows.language,Shows.summary,Shows.img,Shows.url
+        search = '''SELECT Shows.show_id, Shows.name,Shows.language,Shows.summary,Shows.img,Shows.url
                     FROM GenreTag JOIN Shows USING(show_id)
-                    WHERE genres LIKE ? ;'''
-        cur.execute(search,(genre,))
+                    WHERE genres LIKE ? or genres LIKE ?;'''
+        cur.execute(search,(genre1,genre2))
         return cur.fetchall()
         
     def searchg(self,show_id):
@@ -103,7 +103,7 @@ class ShowsDB(object):
     
     def detail(self, show_id):
         cur = self.conn.cursor()        
-        search = '''SELECT summary,show_id, name,img, url, rating FROM Shows
+        search = '''SELECT summary,show_id, name,img, url FROM Shows
                     WHERE show_id == ? ;'''
         cur.execute(search,(show_id,))
         return cur.fetchone()
@@ -136,8 +136,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description = 'test the ShowesDB interface'
     )
-    parser.add_argument('--name', default='%', help="Value for show name")
+    parser.add_argument('--name', default='%',nargs = 2, help="Value for show name")
     args = parser.parse_args()
     db = ShowsDB()
     
-    print json.dumps(db.search(args.name), indent=1)
+    print json.dumps(db.search("Comedy","Action"), indent=1)
