@@ -16,78 +16,77 @@ import time
 from PIL import Image
 
 
-PORT = 9137
+PORT = 8888
 
-COLORS = (
-    'A',
-    'B',
-    'C'
-)
 
-# Ten-Item Personality Inventory (TIPI)
-# http://gosling.psy.utexas.edu/wp-content/uploads/2014/09/tipi.pdf
-# Preceded by the header: 'I see myself as:'
-
-try:
-    os.remove('votes.json')
-    os = {}
-except (OSError):
-    os = {}
-
-try:
-    VOTES = json.load(open('votes.json'))
-except (IOError, ValueError):
-    VOTES = {}
 
 class MainHandler(tornado.web.RequestHandler):
    
-    
-    '''def initialize(self, db):
-        self.db = db'''
         
     def get(self):
-        self.render('responses.html', colors=COLORS, votes=VOTES)
+        self.render('responses.html')
 class FormHandler(tornado.web.RequestHandler):
     def get(self):
         # Calculate the score for each personality trait
-        Extraversion = float(int(self.get_argument("q01", 0)) + int(self.get_argument("q06", 0)))/2
-        Agreeableness = float(int(self.get_argument("q02", 0)) + int(self.get_argument("q07", 0)))/2
-        Conscientiousness = float(int(self.get_argument("q03", 0)) + int(self.get_argument("q08", 0)))/2
-        Neuroticism = float(int(self.get_argument("q04", 0)) + int(self.get_argument("q09", 0)))/2
-        Openness = float(int(self.get_argument("q05", 0)) + int(self.get_argument("q10", 0)))/2
         
-        if Openess>=5:
-            gen1 = "Action"
-            gen2 = ""
-        # Load the scores into dictionary
-        gen = []
-        gen[0] = gen1
-        gen[1] =gen2
-        VOTES['Extraversion'] = VOTES.get('Extraversion', 0) + Extraversion
-        VOTES['Agreeableness'] = VOTES.get('Agreeableness', 0) + Agreeableness
-        VOTES['Conscientiousness'] = VOTES.get('Conscientiousness', 0) + Conscientiousness
-        VOTES['Neuroticism'] = VOTES.get('Neuroticism', 0) + Neuroticism
-        VOTES['Openness'] = VOTES.get('Openness', 0) + Openness
-        json.dump(VOTES, open('votes.json', 'w'))
-        self.render('result.html', votes=VOTES,gen1 = gen1,gen2 = gen2)
+        Open= float(int(self.get_argument("q01", 0)) + int(self.get_argument("q05", 0)))/2
+        violence= float(int(self.get_argument("q02", 0)) + int(self.get_argument("q03", 0)))/2
+        Realistic= float(int(self.get_argument("q06", 0)) + int(self.get_argument("q09", 0)))/2
+        Popular = float(int(self.get_argument("q10", 0)) + int(self.get_argument("q07", 0)))/2
+        Engaging= float(int(self.get_argument("q10", 0)) + int(self.get_argument("q3", 0)))/2
+        
+        if Open>=5 :
+            gen1 = "Drama"
+            gen2 = "Mystery"
+        if violence>=5: 
+        	gen1 ="Action"
+        	gen2 ="Thriller"
+        if Realistic>=5: 
+        	gen1="Drama"
+        	gen2="Comedy"
+        if Popular>=5: 
+        	gen1="Drama"
+        	gen2= "Adventure"
+        if Engaging>=5: 
+        	gen1="Mystery"
+        	gen2= "Sci-fi"
+        else:
+            gen1 = "Western"
+            gen2 = "Fantasy"
+            
+
+        
+        self.render('result.html', gen1=gen1,gen2=gen2)
         
 class GenreHandler(tornado.web.RequestHandler):
     def initialize(self, db):
         self.db = db
-    def get(self):    
-        shows = self.db.search_genre("genre")
+    def get(self):  
+        gen1 = self.get_argument('genre1')
+        gen2 = self.get_argument('genre2')
+        shows = self.db.search(gen1,gen2)
         for i in range(len(shows)):
             shows[i]['genres'] = self.db.searchg(shows[i]['show_id'])
                 
         self.write(dict(data = shows))
+        
+class DetailHandler(tornado.web.RequestHandler):
+    def initialize(self,db):
+        self.db = db
+    def get(self):
+        show_id = self.get_argument('show_id')
+        self.write(dict(data = self.db.detail(show_id)))
 
 # BE SURE TO TURN OFF DEBUG IN PROD
-db = ShowsDB
+db = ShowsDB()
 Application = tornado.web.Application([
         (r"/", MainHandler),
-        (r"/results", ResultsHandler),
+        (r"/form", FormHandler),
         (r"/search", GenreHandler,{'db':db}),
-        (r"/files/(.*)", tornado.web.StaticFileHandler, {'path': '.'}),
+        (r'/detail', DetailHandler, {'db': db }),
+        (r"/js/(.*)", tornado.web.StaticFileHandler, {'path': 'js'}),
+        (r"/css/(.*)", tornado.web.StaticFileHandler, {'path': 'css'})
     ], debug=True)
 
 Application.listen(PORT)
+tornado.ioloop.IOLoop.current().start()
