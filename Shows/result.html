@@ -1,22 +1,16 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu May 04 15:32:22 2017
-
-@author: Eric
-"""
-
-%%file results.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/png" href="/img/favicon.png" />
   <link rel="apple-touch-icon" href="/img/favicon.png" />
-  <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" integrity="sha384-zF4BRsG/fLiTGfR9QL82DrilZxrwgY/+du4p/c7J72zZj+FLYq4zY00RylP9ZjiT" crossorigin="anonymous">
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/darkly/bootstrap.min.css" rel="stylesheet" integrity="sha384-S7YMK1xjUjSpEnF4P8hPUcgjXYLZKK3fQW1j5ObLSl787II9p8RO9XUGehRmKsxd" crossorigin="anonymous">
+    <!--<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" integrity="sha384-zF4BRsG/fLiTGfR9QL82DrilZxrwgY/+du4p/c7J72zZj+FLYq4zY00RylP9ZjiT" crossorigin="anonymous">-->  
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script src="shows.js"></script>
+  <script src="/js/shows.js"></script>
+  <link href="/css/shows.css" rel="stylesheet">
 <title>
     Shows Recommendation 
 </title>
@@ -40,17 +34,19 @@ Created on Thu May 04 15:32:22 2017
       </div>
     </nav>
     <input type="hidden" name="gen1" id="gen1" value={{gen1}}>
-<input type="hidden" name="gen2" id="gen2" value={{gen2}}>
+    <input type="hidden" name="gen2" id="gen2" value={{gen2}}>
     <div class="row">
         <div class="col-md-3">
                 <div class="alert alert-info">
-          <h4>Our recommendation of genres are: </h4>
+          <h3>Our recommendation of genres are: </h3>
                 <div id="rec_genres" name="rec_genres">
                                 
                 </div>
             </div>        
         </div>
-        <div class="col-md-9" name="result" id="result">
+        <div class="col-md-9" >
+            <div class="griditem" name="result" id= "result">
+            </div>
 
         </div>   
          
@@ -62,16 +58,17 @@ Created on Thu May 04 15:32:22 2017
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title" id="detail_header"></h4>
+          <h3 class="modal-title" id="detail_header"></h3>
         </div>
         <div class="modal-body" id="detail_body">
+    
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
-
+</div>
  </div>
 </body>
 </html>
